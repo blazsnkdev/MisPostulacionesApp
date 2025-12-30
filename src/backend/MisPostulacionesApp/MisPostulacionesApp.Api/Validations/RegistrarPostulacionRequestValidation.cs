@@ -32,10 +32,6 @@ namespace MisPostulacionesApp.Api.Validations
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("El salario no puede ser negativo");
 
-            RuleFor(x => x.Estado)
-                .NotEmpty().WithMessage("El estado es obligatorio")
-                .MaximumLength(50);
-
             RuleFor(x => x.Modalidad)
                 .NotEmpty().WithMessage("La modalidad es obligatoria")
                 .MaximumLength(50);

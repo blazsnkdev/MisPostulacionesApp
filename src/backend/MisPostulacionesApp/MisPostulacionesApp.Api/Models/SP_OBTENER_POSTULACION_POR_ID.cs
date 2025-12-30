@@ -1,8 +1,8 @@
 ﻿namespace MisPostulacionesApp.Api.Models
 {
-    public class SP_OBTENER_ULTIMA_POSTULACION
+    public class SP_OBTENER_POSTULACION_POR_ID
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Titulo { get; set; }
         public string Empresa { get; set; }
         public string Rol { get; set; }

@@ -8,7 +8,6 @@
         string Descripcion,
         string Tecnologias,
         decimal Salario,
-        string Estado,
         string Modalidad,
         string Plataforma,
         string Notas

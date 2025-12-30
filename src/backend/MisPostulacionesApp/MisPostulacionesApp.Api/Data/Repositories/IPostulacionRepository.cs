@@ -4,7 +4,8 @@ namespace MisPostulacionesApp.Api.Data.Repositories
 {
     public interface IPostulacionRepository
     {
-        string RegistrarPostulacion(SP_REGISTRAR_POSTULACION model);
-        SP_OBTENER_ULTIMA_POSTULACION? ObtenerUltimaPostulacion();
+        bool RegistrarPostulacion(SP_REGISTRAR_POSTULACION model);
+        SP_OBTENER_POSTULACION_POR_ID? ObtenerUltimaPostulacion();
+        SP_OBTENER_POSTULACION_POR_ID? ObtenerPostulacionPorId(Guid id);
     }
 }

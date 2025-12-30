@@ -2,7 +2,7 @@
 {
     public sealed record ObtenerPostulacionResponse
     (
-        int Id,
+        Guid Id,
         string Titulo,
         string Empresa,
         string Descripcion,

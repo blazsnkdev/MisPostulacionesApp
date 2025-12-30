@@ -21,7 +21,19 @@ namespace MisPostulacionesApp.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, result.Error!.Message);
             }
-            return StatusCode(StatusCodes.Status201Created, result.Value);
+            //return StatusCode(StatusCodes.Status201Created, result.Value);
+            return CreatedAtAction(nameof(Get), new { id = result.Value }, new { Id = result.Value });
         }
+        [HttpGet("{id:guid}")]
+        public IActionResult Get(Guid id)
+        {
+            var result = _postulacionService.ObtenerPostulacion(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result.Error!.Message);
+            }
+            return Ok(result.Value);
+        }
+
     }
 }

@@ -15,40 +15,46 @@ namespace MisPostulacionesApp.Api.Services.Implements
             _postulacionRepository = postulacionRepository;
         }
 
-        public Result<ObtenerPostulacionResponse> RegistrarPostulacion(RegistrarPostulacionRequest request)
+        public Result<ObtenerPostulacionResponse> ObtenerPostulacion(Guid id)
         {
+            var postulacion = _postulacionRepository.ObtenerPostulacionPorId(id);
+            if(postulacion is null)
+            {
+                return Result<ObtenerPostulacionResponse>.Failure(Error.NotFound());
+            }
+            var response = new ObtenerPostulacionResponse(
+                postulacion.Id,
+                postulacion.Titulo,
+                postulacion.Empresa,
+                postulacion.Descripcion,
+                postulacion.Tecnologias,
+                postulacion.Salario,
+                postulacion.Estado,
+                postulacion.Modalidad,
+                postulacion.Plataforma,
+                postulacion.FechaPostulacion,
+                postulacion.Notas ?? string.Empty,
+                postulacion.FechaCreacion);
+            return Result<ObtenerPostulacionResponse>.Success(response);
+        }
+
+        public Result<Guid> RegistrarPostulacion(RegistrarPostulacionRequest request)
+        {
+            var id = Guid.CreateVersion7();
             _postulacionRepository.RegistrarPostulacion(new SP_REGISTRAR_POSTULACION(
+                id,
                 request.Titulo,
                 request.Empresa,
                 request.Rol,
                 request.Descripcion,
                 request.Salario,
                 request.Tecnologias,
-                request.Estado,
+                Estado.Postulado.ToString(),//NOTE: esto puede manejarse desde el front
                 request.Modalidad,
                 request.Plataforma,
                 request.Notas
                 ));
-            var ultimaPostulacion = _postulacionRepository.ObtenerUltimaPostulacion();
-            if(ultimaPostulacion is null)
-            {
-                return Result<ObtenerPostulacionResponse>.Failure(Error.Validation("no hay postulación"));
-            }
-            var response = new ObtenerPostulacionResponse(
-                ultimaPostulacion.Id,
-                ultimaPostulacion.Titulo,
-                ultimaPostulacion.Empresa,
-                ultimaPostulacion.Descripcion,
-                ultimaPostulacion.Tecnologias,
-                ultimaPostulacion.Salario,
-                ultimaPostulacion.Estado,
-                ultimaPostulacion.Modalidad,
-                ultimaPostulacion.Plataforma,
-                ultimaPostulacion.FechaPostulacion,
-                ultimaPostulacion.Notas ?? "",
-                ultimaPostulacion.FechaCreacion
-                );
-            return Result<ObtenerPostulacionResponse>.Success(response);
+            return Result<Guid>.Success(id);
         }
     }
 }

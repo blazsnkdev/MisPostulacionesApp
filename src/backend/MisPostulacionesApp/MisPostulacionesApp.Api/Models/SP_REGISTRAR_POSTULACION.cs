@@ -3,6 +3,7 @@
     public class SP_REGISTRAR_POSTULACION
     {
         public SP_REGISTRAR_POSTULACION(
+            Guid id,
             string titulo,
             string empresa,
             string rol,
@@ -14,6 +15,7 @@
             string plataforma,
             string notas)
         {
+            Id = id;
             Titulo = titulo;
             Empresa = empresa;
             Rol = rol;
@@ -25,7 +27,7 @@
             Plataforma = plataforma;
             Notas = notas;
         }
-
+        public Guid Id { get; set; }
         public string Titulo {get; set; }
         public string Empresa { get; set; }
         public string Rol { get; set; }
@@ -36,5 +38,12 @@
         public string Modalidad { get; set; }
         public string Plataforma { get; set; }
         public string Notas { get; set; }
+    }
+    public enum Estado
+    {
+        Visto,
+        Postulado,
+        Gestion,
+        Finalizado
     }
 }

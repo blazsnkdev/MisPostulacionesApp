@@ -6,6 +6,7 @@ namespace MisPostulacionesApp.Api.Services
 {
     public interface IPostulacionService
     {
-        Result<ObtenerPostulacionResponse> RegistrarPostulacion(RegistrarPostulacionRequest request);
+        Result<Guid> RegistrarPostulacion(RegistrarPostulacionRequest request);
+        Result<ObtenerPostulacionResponse> ObtenerPostulacion(Guid id);
     }
 }
