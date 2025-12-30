@@ -6,6 +6,7 @@
         string Titulo,
         string Empresa,
         string Descripcion,
+        string Rol,
         string Tecnologias,
         decimal Salario,
         string Estado,

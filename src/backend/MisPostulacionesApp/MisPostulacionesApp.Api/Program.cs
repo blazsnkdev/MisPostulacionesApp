@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
 builder.Services.AddScoped<IPostulacionRepository, PostulacionRepository>();
 builder.Services.AddScoped<IPostulacionService, PostulacionService>();
+builder.Services.AddSingleton<INotificacionService,WhatsAppService>();
 
 builder.Services.AddControllers();
 

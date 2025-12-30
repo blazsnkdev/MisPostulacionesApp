@@ -20,7 +20,7 @@ namespace MisPostulacionesApp.Api.Data.Implements
             conexion.Open();
 
             using var comando = conexion.CreateCommand();
-            comando.CommandText = "SP_OBTENER_ULTIMA_POSTULACION";
+            comando.CommandText = "SP_OBTENER_POSTULACION_POR_ID";
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Add(new SqlParameter("@ID", SqlDbType.UniqueIdentifier) { Value = id});
             using var lector = comando.ExecuteReader();

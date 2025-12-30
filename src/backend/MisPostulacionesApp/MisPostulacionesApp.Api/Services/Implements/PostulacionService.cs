@@ -27,6 +27,7 @@ namespace MisPostulacionesApp.Api.Services.Implements
                 postulacion.Titulo,
                 postulacion.Empresa,
                 postulacion.Descripcion,
+                postulacion.Rol,
                 postulacion.Tecnologias,
                 postulacion.Salario,
                 postulacion.Estado,
