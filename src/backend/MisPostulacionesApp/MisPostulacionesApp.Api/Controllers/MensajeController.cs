@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MisPostulacionesApp.Api.DTOs.Requests;
 using MisPostulacionesApp.Api.Services;
+using MisPostulacionesApp.Api.Utils;
 
 namespace MisPostulacionesApp.Api.Controllers
 {
@@ -23,7 +24,7 @@ namespace MisPostulacionesApp.Api.Controllers
             var result = _postulacionService.ObtenerPostulacion(request.Id);
             var postulacion = result.Value!;
             string mensaje = $@"
-                Nueva postulación registrada:
+                Camilo Blas Asto Aiquipa postulo a:
                 Título: {postulacion.Titulo}
                 Empresa: {postulacion.Empresa}
                 Rol: {postulacion.Rol}
@@ -35,10 +36,16 @@ namespace MisPostulacionesApp.Api.Controllers
                 Plataforma: {postulacion.Plataforma}
                 Notas: {postulacion.Notas}
                 Fecha de postulación: {postulacion.FechaPostulacion:dd/MM/yyyy}
-                ";
+                ";//HaRdC0d3: mal
 
-            _notificacionService.EnviarMensaje(request.NumeroDestino, mensaje);
-            return Ok(new {mensaje = "enviado!" });
+            var sendResult = _notificacionService.EnviarMensaje(request.NumeroDestino, mensaje);
+            if (!sendResult.IsSuccess)
+            {
+                var responseFail = ApiResponse<object>.Fail(sendResult.Error!.Message);
+                return BadRequest(responseFail);
+            }
+            var responseSuccess = ApiResponse<object>.Success(sendResult.Value);
+            return Ok(responseSuccess);
         }
     }
 }

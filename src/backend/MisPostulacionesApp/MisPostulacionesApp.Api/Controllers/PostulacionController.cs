@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MisPostulacionesApp.Api.DTOs.Requests;
 using MisPostulacionesApp.Api.Services;
+using MisPostulacionesApp.Api.Utils;
 
 namespace MisPostulacionesApp.Api.Controllers
 {
@@ -19,10 +20,11 @@ namespace MisPostulacionesApp.Api.Controllers
             var result = _postulacionService.RegistrarPostulacion(request);
             if (!result.IsSuccess)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, result.Error!.Message);
+                var responseFail = ApiResponse<object>.Fail(result.Error!.Message);
+                return BadRequest(responseFail);
             }
-            //return StatusCode(StatusCodes.Status201Created, result.Value);
-            return CreatedAtAction(nameof(Get), new { id = result.Value }, new { Id = result.Value });
+            var responseSuccess = ApiResponse<object>.Success(result.Value);
+            return CreatedAtAction(nameof(Get), new { id = result.Value }, responseSuccess);
         }
         [HttpGet("{id:guid}")]
         public IActionResult Get(Guid id)
@@ -30,9 +32,11 @@ namespace MisPostulacionesApp.Api.Controllers
             var result = _postulacionService.ObtenerPostulacion(id);
             if (!result.IsSuccess)
             {
-                return NotFound(result.Error!.Message);
+                var responseFail = ApiResponse<object>.Fail(result.Error!.Message);
+                return NotFound(responseFail);
             }
-            return Ok(result.Value);
+            var responseSuccess = ApiResponse<object>.Success(result.Value!);
+            return Ok(responseSuccess);
         }
 
     }

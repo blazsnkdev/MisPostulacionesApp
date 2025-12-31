@@ -95,7 +95,7 @@ namespace MisPostulacionesApp.Api.Data.Implements
             comando.Parameters.Add(new SqlParameter("@EMPRESA", SqlDbType.NVarChar, 150) { Value = sp.Empresa });
             comando.Parameters.Add(new SqlParameter("@ROL", SqlDbType.NVarChar, 150) { Value = sp.Rol });
             comando.Parameters.Add(new SqlParameter("@DESCRIPCION", SqlDbType.NVarChar, 500) { Value = sp.Descripcion });
-            comando.Parameters.Add(new SqlParameter("@TECNOLOGIAS", SqlDbType.NVarChar, 300) { Value = sp.Descripcion});
+            comando.Parameters.Add(new SqlParameter("@TECNOLOGIAS", SqlDbType.NVarChar, 300) { Value = sp.Tecnologia});
             comando.Parameters.Add(new SqlParameter("@SALARIO", SqlDbType.Decimal) { Value = sp.Salario });
             comando.Parameters.Add(new SqlParameter("@ESTADO", SqlDbType.NVarChar, 50) { Value = sp.Estado });
             comando.Parameters.Add(new SqlParameter("@MODALIDAD", SqlDbType.NVarChar, 50) { Value = sp.Modalidad });

@@ -1,7 +1,9 @@
-﻿namespace MisPostulacionesApp.Api.Services
+﻿using MisPostulacionesApp.Api.Utils;
+
+namespace MisPostulacionesApp.Api.Services
 {
     public interface INotificacionService
     {
-        void EnviarMensaje(string numeroDestino,string mensaje);
+        Result<string> EnviarMensaje(string numeroDestino,string mensaje);
     }
 }

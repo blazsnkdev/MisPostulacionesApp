@@ -1,4 +1,5 @@
-﻿using Twilio;
+﻿using MisPostulacionesApp.Api.Utils;
+using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 
@@ -18,14 +19,25 @@ namespace MisPostulacionesApp.Api.Services.Implements
             TwilioClient.Init(_accountSid, _authToken);
         }
 
-        public void EnviarMensaje(string numeroDestino, string mensaje)
+        public Result<string> EnviarMensaje(string numeroDestino, string mensaje)
         {
-            var messaje = MessageResource.Create(
+            try
+            {
+                var message = MessageResource.Create(
                 from: new PhoneNumber(_fromNumber),
                 to: new PhoneNumber($"whatsapp:{numeroDestino}"),
                 body: mensaje
                 );
-            Console.WriteLine($"Mensaje enviado {messaje.Sid}");
+                //Console.WriteLine($"Mensaje enviado {messaje.Sid}");
+                Console.WriteLine($"Data:{message.Sid}, {message.Body}");
+                return Result<string>.Success(message.Sid);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<string>.Failure(Error.Unknown());
+            }
+            
         }
     }
 }
