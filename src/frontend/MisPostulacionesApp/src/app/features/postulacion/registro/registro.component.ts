@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PostulacionService } from '../../../core/services/postulacion.service';
-
-// Importaciones de Angular Material
+import { MensajeService } from '../../../core/services/mensaje/mensaje.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -35,27 +34,25 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 })
 export class RegistroComponent {
 
-  // FORM SOLO PARA IA
+  
   formIA: FormGroup;
-
-  // FORM SOLO PARA GUARDAR POSTULACIÓN
   form: FormGroup;
-
   procesando = false;
   guardando = false;
 
   constructor(
     private fb: FormBuilder,
     private postulacionService: PostulacionService,
+    private mensajeService: MensajeService,
     private snackBar: MatSnackBar
   ) {
 
-    // ✅ FORM IA
+    
     this.formIA = this.fb.group({
       textoIA: ['', Validators.required]
     });
 
-    // ✅ FORM POSTULACIÓN
+    
     this.form = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
       empresa: ['', [Validators.required, Validators.minLength(2)]],
@@ -106,38 +103,56 @@ procesarIA() {
 
 
   guardarPostulacion() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.mostrarError('Por favor, completa los campos requeridos');
-      return;
-    }
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    this.mostrarError('Por favor, completa los campos requeridos');
+    return;
+  }
 
-    this.guardando = true;
-    
-    // Crear objeto con la estructura correcta para el backend
-    const postulacionData = {
-      titulo: this.form.get('titulo')?.value,
-      empresa: this.form.get('empresa')?.value,
-      rol: this.form.get('rol')?.value,
-      descripcion: this.form.get('descripcion')?.value,
-      tecnologias: this.form.get('tecnologias')?.value,
-      salario: this.form.get('salario')?.value,
-      modalidad: this.form.get('modalidad')?.value,
-      plataforma: this.form.get('plataforma')?.value,
-      notas: this.form.get('notas')?.value
+  this.guardando = true;
+
+  const postulacionData = {
+    titulo: this.form.value.titulo,
+    empresa: this.form.value.empresa,
+    rol: this.form.value.rol,
+    descripcion: this.form.value.descripcion,
+    tecnologias: this.form.value.tecnologias,
+    salario: this.form.value.salario,
+    modalidad: this.form.value.modalidad,
+    plataforma: this.form.value.plataforma,
+    notas: this.form.value.notas
+  };
+
+  this.postulacionService.registrarPostulacion(postulacionData).subscribe({
+    next: (response) => {
+      this.guardando = false;
+
+      const postulacionId = response.value; 
+
+      this.mostrarExito('¡Postulación guardada exitosamente!');
+      this.enviarMensaje(postulacionId);
+
+      this.limpiarFormulario();
+    },
+    error: () => {
+      this.guardando = false;
+      this.mostrarError('Error al guardar la postulación');
+    }
+  });
+}
+
+    private enviarMensaje(postulacionId: string) {
+    const payload = {
+      numeroDestino: '51943787437',
+      id: postulacionId
     };
 
-    this.postulacionService.registrarPostulacion(postulacionData).subscribe({
-      next: (response) => {
-        console.log('Postulación guardada:', response);
-        this.guardando = false;
-        this.mostrarExito('¡Postulación guardada exitosamente!');
-        this.limpiarFormulario();
+    this.mensajeService.enviarMensaje(payload).subscribe({
+      next: () => {
+        this.mostrarExito('Mensaje enviado correctamente');
       },
-      error: (err) => {
-        console.error('Error al guardar postulación:', err);
-        this.guardando = false;
-        this.mostrarError('Error al guardar la postulación. Intenta nuevamente.');
+      error: () => {
+        this.mostrarError('La postulación se guardó, pero el mensaje falló');
       }
     });
   }
