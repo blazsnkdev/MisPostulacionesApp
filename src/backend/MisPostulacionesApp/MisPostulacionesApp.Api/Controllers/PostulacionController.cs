@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MisPostulacionesApp.Api.DTOs.Requests;
 using MisPostulacionesApp.Api.Services;
+using MisPostulacionesApp.Api.Services.Implements;
 using MisPostulacionesApp.Api.Utils;
 
 namespace MisPostulacionesApp.Api.Controllers
@@ -10,9 +11,13 @@ namespace MisPostulacionesApp.Api.Controllers
     public class PostulacionController : ControllerBase
     {
         private readonly IPostulacionService _postulacionService;
-        public PostulacionController(IPostulacionService postulacionService)
+        private readonly IAService _iaService;
+        public PostulacionController(
+            IPostulacionService postulacionService,
+            IAService iaService)
         {
             _postulacionService = postulacionService;
+            _iaService = iaService;
         }
         [HttpPost]
         public IActionResult Create([FromBody] RegistrarPostulacionRequest request)
@@ -37,6 +42,12 @@ namespace MisPostulacionesApp.Api.Controllers
             }
             var responseSuccess = ApiResponse<object>.Success(result.Value!);
             return Ok(responseSuccess);
+        }
+        [HttpPost("ia/procesar")]
+        public async Task<IActionResult> ProcesarIA([FromBody] string texto)
+        {
+            var resultado = await _iaService.ProcesarTextoAsync(texto);
+            return Ok(resultado);
         }
 
     }
